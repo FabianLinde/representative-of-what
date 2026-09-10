@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Representative of what?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16222E;
+  --paper:#F6F7F5;
+  --panel:#FFFFFF;
+  --rule:#C9D1D4;
+  --muted:#5F7080;
+  --uniform:#5A3FD6;
+  --empirical:#0B6E62;
+  --uniform-wash:rgba(90,63,214,.10);
+  --empirical-wash:rgba(11,110,98,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EDEF;
+    --paper:#101A22;
+    --panel:#17242E;
+    --rule:#33454F;
+    --muted:#9AAAB4;
+    --uniform:#A99BF5;
+    --empirical:#4FC7B4;
+    --uniform-wash:rgba(169,155,245,.14);
+    --empirical-wash:rgba(79,199,180,.14);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EDEF;
+  --paper:#101A22;
+  --panel:#17242E;
+  --rule:#33454F;
+  --muted:#9AAAB4;
+  --uniform:#A99BF5;
+  --empirical:#4FC7B4;
+  --uniform-wash:rgba(169,155,245,.14);
+  --empirical-wash:rgba(79,199,180,.14);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:18px;
+  line-height:1.62;
+}
+.wrap{max-width:724px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(18px,4vw,32px) 96px}
+p{margin:0 0 1.1em}
+h1,h2,h3,.ui{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+
+h1{
+  font-size:clamp(30px,5.4vw,50px);
+  line-height:1.04;
+  font-weight:700;
+  letter-spacing:-.021em;
+  margin:0 0 .5rem;
+  max-width:19ch;
+}
+.thesis{
+  font-size:clamp(18px,2.4vw,22px);
+  line-height:1.45;
+  color:var(--muted);
+  max-width:56ch;
+  margin:0 0 2.6rem;
+}
+.thesis b{color:var(--ink);font-weight:400}
+
+h2{
+  font-size:clamp(20px,3vw,26px);
+  font-weight:600;
+  letter-spacing:-.012em;
+  margin:3.4rem 0 1rem;
+  padding-top:1.4rem;
+  border-top:1px solid var(--rule);
+}
+
+/* ---------- instrument ---------- */
+.instrument{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  padding:clamp(16px,3vw,26px);
+  margin:0 0 1.2rem;
+}
+.chart-wrap{width:100%;overflow-x:auto}
+svg{display:block;width:100%;height:auto;touch-action:none}
+.bar{fill:var(--ink);cursor:ns-resize}
+.bar:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.grab{cursor:ns-resize;fill:transparent}
+.axis{stroke:var(--rule);stroke-width:1}
+.glabel{font-family:Archivo,sans-serif;font-size:13px;fill:var(--muted)}
+.refline-u{stroke:var(--uniform);stroke-width:2;stroke-dasharray:7 5;fill:none}
+.refline-e{stroke:var(--empirical);stroke-width:2;stroke-dasharray:2 4;fill:none}
+.rlabel{font-family:Archivo,sans-serif;font-size:12px;font-weight:600}
+.ru{fill:var(--uniform)}
+.re{fill:var(--empirical)}
+
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin-top:18px}
+
+.legend{list-style:none;margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--rule);
+  font-family:Archivo,sans-serif;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.legend li{display:grid;grid-template-columns:28px 1fr;column-gap:12px;align-items:start;
+  margin-bottom:11px}
+.legend li:last-child{margin-bottom:0}
+.legend .title{display:block;color:var(--ink);font-weight:600;margin-bottom:1px}
+.key{position:relative;width:28px;height:1.45em}
+.key::before{content:"";position:absolute;left:0}
+.key-bar::before{top:.28em;width:10px;height:14px;background:var(--ink)}
+.key-u::before{right:0;top:.62em;border-top:2px dashed var(--uniform)}
+.key-e::before{right:0;top:.6em;border-top:3px dotted var(--empirical)}
+.readout{background:var(--panel);padding:14px 16px}
+.readout .name{font-family:Archivo,sans-serif;font-size:13.5px;font-weight:600;letter-spacing:.005em;margin:0 0 2px;display:flex;align-items:center;gap:7px}
+.swatch{width:22px;height:0;border-top-width:2px;border-top-style:dashed;flex:none}
+.sw-u{border-color:var(--uniform)}
+.sw-e{border-color:var(--empirical);border-top-style:dotted;border-top-width:3px}
+.readout .val{font-family:Archivo,sans-serif;font-size:clamp(30px,6vw,42px);font-weight:700;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.u .val{color:var(--uniform)}
+.e .val{color:var(--empirical)}
+.readout .sub{font-family:Archivo,sans-serif;font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.35}
+.formula{font-family:"Source Serif 4",Georgia,serif;font-size:15px;line-height:1.9;
+  color:var(--ink);display:block}
+.formula i{font-style:italic}
+.formula sub{font-size:.72em;vertical-align:-.25em;font-style:italic}
+.frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle}
+.frac .num{padding:0 .45em 2px}
+.frac .den{padding:3px .45em 0;border-top:1px solid currentColor}
+.sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1;margin:0 .18em;vertical-align:middle}
+.sum .sig{font-size:1.3em;line-height:1}
+.sum .lim{font-size:.58em;line-height:1;margin-top:2px;white-space:nowrap}
+
+.maths{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule)}
+.maths>summary{font-family:Archivo,sans-serif;font-size:13px;color:var(--muted);
+  cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:7px;padding:1px 0}
+.maths>summary::-webkit-details-marker{display:none}
+.maths>summary:hover{color:var(--ink)}
+.maths>summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.maths>summary::before{content:"";width:7px;height:7px;flex:none;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(-45deg);margin-left:2px;transition:transform .15s ease}
+.maths[open]>summary::before{transform:rotate(45deg)}
+.maths[open]>summary{color:var(--ink)}
+.maths-body{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:16px 0 4px}
+.maths-body>div{display:flex;flex-direction:column;gap:8px}
+.mlabel{font-family:Archivo,sans-serif;font-size:12.5px;font-weight:600}
+.mlabel.u{color:var(--uniform)}
+.mlabel.e{color:var(--empirical)}
+.symkey{font-family:Archivo,sans-serif;font-size:12.5px;color:var(--muted);
+  line-height:1.55;margin:4px 0 0}
+.symkey i{font-family:"Source Serif 4",Georgia,serif;font-style:italic;color:var(--ink)}
+@media (max-width:560px){.maths-body{grid-template-columns:1fr;gap:18px}}
+@media (prefers-reduced-motion:reduce){.maths>summary::before{transition:none}}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 2.2rem}
+button{
+  font-family:Archivo,sans-serif;font-size:14px;font-weight:500;
+  background:transparent;color:var(--ink);
+  border:1px solid var(--rule);border-radius:0;
+  padding:8px 13px;cursor:pointer;
+}
+button:hover{border-color:var(--ink)}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.hint{font-family:Archivo,sans-serif;font-size:13px;color:var(--muted);margin:10px 0 0}
+
+/* ---------- flip ---------- */
+.flip{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.4rem 0}
+.flip>div{background:var(--panel);padding:16px}
+.flip h3{font-size:15px;font-weight:600;margin:0 0 4px}
+.flip .desc{font-family:Archivo,sans-serif;font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.4}
+.mini{display:block;width:100%;height:auto;margin-bottom:14px}
+.score{font-family:Archivo,sans-serif;display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-top:1px solid var(--rule);font-size:13.5px}
+.score b{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.score.u b{color:var(--uniform)}
+.score.e b{color:var(--empirical)}
+.win{font-size:11.5px;font-weight:600;padding:1px 6px;margin-left:7px;vertical-align:2px}
+.win.u{background:var(--uniform-wash);color:var(--uniform)}
+.win.e{background:var(--empirical-wash);color:var(--empirical)}
+
+/* ---------- deployments ---------- */
+.dep{border-top:1px solid var(--rule);padding:20px 0 4px}
+.dep h3{font-size:19px;font-weight:600;margin:0 0 2px}
+.dep .cls{font-family:Archivo,sans-serif;font-size:13px;color:var(--muted);margin:0 0 12px}
+.verdict{font-family:Archivo,sans-serif;font-size:14.5px;font-weight:500;padding:11px 14px;margin:14px 0 0;border-left:3px solid}
+.verdict.e{border-color:var(--empirical);background:var(--empirical-wash)}
+.verdict.u{border-color:var(--uniform);background:var(--uniform-wash)}
+
+footer{border-top:1px solid var(--rule);margin-top:3.6rem;padding-top:1.2rem;font-family:Archivo,sans-serif;font-size:13.5px;color:var(--muted)}
+footer p{max-width:none}
+@media (max-width:560px){
+  .readouts,.flip{grid-template-columns:1fr}
+  body{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Representative of what?</h1>
+<p class="thesis">The EU AI Act requires training data to be <b>“sufficiently representative”</b> without saying representative of what. Two measures answer that question differently, and they do not agree.</p>
+
+<div class="instrument">
+  <div class="chart-wrap">
+    <svg id="chart" viewBox="0 0 700 300" role="img" aria-label="Interactive bar chart of dataset group proportions with two reference distributions overlaid"></svg>
+  </div>
+  <ul class="legend">
+    <li><span class="key key-bar" aria-hidden="true"></span><span><span class="title">The dataset</span>How the training data is split across four groups. Drag any bar to change it.</span></li>
+    <li><span class="key key-u" aria-hidden="true"></span><span><span class="title">The even split</span>A flat line at 25% per group. The uniform measure asks how close the bars sit to this.</span></li>
+    <li><span class="key key-e" aria-hidden="true"></span><span><span class="title">The population</span>The stepped outline shows who the system will actually encounter: 55%, 25%, 15% and 5%. The empirical measure asks how close the bars sit to this.</span></li>
+  </ul>
+  <div class="readouts">
+    <div class="readout u">
+      <p class="name"><span class="swatch sw-u"></span>Uniform representativeness</p>
+      <div class="val" id="valU">1.00</div>
+      <p class="sub">Shannon evenness. Reaches 1 when every group holds an equal share.</p>
+    </div>
+    <div class="readout e">
+      <p class="name"><span class="swatch sw-e"></span>Empirical representativeness</p>
+      <div class="val" id="valE">0.70</div>
+      <p class="sub">One minus total variation distance. Reaches 1 when the dataset matches the population exactly.</p>
+    </div>
+  </div>
+  <details class="maths">
+    <summary>Show the formulas</summary>
+    <div class="maths-body">
+      <div>
+        <span class="mlabel u">Uniform</span>
+        <div class="formula"><span class="frac"><span class="num">&minus;<span class="sum"><span class="sig">&sum;</span><span class="lim"><i>g</i>&isin;<i>G</i></span></span> <i>p</i><sub>g</sub> ln <i>p</i><sub>g</sub></span><span class="den">ln <i>R</i></span></span></div>
+      </div>
+      <div>
+        <span class="mlabel e">Empirical</span>
+        <div class="formula">1 &minus; <span style="font-size:1.15em">&frac12;</span>&thinsp;<span class="sum"><span class="sig">&sum;</span><span class="lim"><i>g</i>&isin;<i>G</i></span></span> |<i>p</i><sub>g</sub> &minus; <i>q</i><sub>g</sub>|</div>
+      </div>
+    </div>
+    <p class="symkey"><i>p</i><sub>g</sub> is the dataset&rsquo;s share of group <i>g</i>, <i>q</i><sub>g</sub> the population&rsquo;s share of the same group, and <i>R</i> the number of groups. <i>G</i> is the set of all groups, so both sums run over every one of them. Only the second takes <i>q</i> as an input at all.</p>
+  </details>
+  <p class="hint">Drag any bar to reshape the dataset. Both readings update; neither predicts the other.</p>
+</div>
+
+<div class="controls">
+  <button id="p0" aria-pressed="true">Even split</button>
+  <button id="p1" aria-pressed="false">Matches the population</button>
+  <button id="p2" aria-pressed="false">One group missing</button>
+</div>
+
+<p>Both readings run from 0 to 1, and on both, higher means more representative. They are measuring the same dataset. They are simply pointed at different references: one at an even split across groups, the other at the population the system will actually encounter.</p>
+
+<h2>The rankings can invert</h2>
+
+<p>This is the part that cannot be argued away as a matter of emphasis. Take two candidate datasets and one skewed target population. Each measure prefers a different dataset.</p>
+
+<div class="flip">
+  <div>
+    <h3>Dataset A</h3>
+    <p class="desc">An even split across all four groups.</p>
+    <svg class="mini" id="miniA" viewBox="0 0 300 110" aria-hidden="true"></svg>
+    <div class="score u"><span>Uniform</span><span><b>1.00</b><span class="win u">prefers A</span></span></div>
+    <div class="score e"><span>Empirical</span><b>0.70</b></div>
+  </div>
+  <div>
+    <h3>Dataset B</h3>
+    <p class="desc">Matches the target population exactly.</p>
+    <svg class="mini" id="miniB" viewBox="0 0 300 110" aria-hidden="true"></svg>
+    <div class="score u"><span>Uniform</span><b>0.80</b></div>
+    <div class="score e"><span>Empirical</span><span><b>1.00</b><span class="win e">prefers B</span></span></div>
+  </div>
+</div>
+
+<p>Each dataset scores a flawless 1.00 on one measure. A provider who computes an evenness index reports that A is the ideal dataset. A provider who computes distance to the deployment population reports that B is. Both have measured representativeness. Both are correct about what they measured. Neither has been asked to say which reference they used, and the Act does not require them to.</p>
+
+<h2>Which reference is right depends on the deployment</h2>
+
+<p>These two systems both fall under Annex III of the AI Act, and both are therefore governed by the same data-governance obligation. The reference that serves one of them is wrong for the other.</p>
+
+<div class="dep">
+  <h3>Case-law retrieval for a judicial authority</h3>
+  <p class="cls">Annex III, point 8(a)</p>
+  <p>The system reports what the law is. Its output is correct insofar as it reflects the body of sources as those sources actually stand. If decided cases are unevenly distributed across outcomes or subject matter, that unevenness is a fact about the law. Rebalancing the index toward an even split would make the system misdescribe the legal landscape, and a judge relying on it would form a distorted impression of how comparable matters have been decided.</p>
+  <p class="verdict e">The empirical reference is correct here. Evenness is not a virtue; it is a distortion.</p>
+</div>
+
+<div class="dep">
+  <h3>Decision support in public administration</h3>
+  <p class="cls">Annex III, point 5</p>
+  <p>The system produces assessments about individual people, and its purpose is not historical accuracy but accurate and fair decision-making. A group sparsely represented in the training data is one the model has had least opportunity to learn, so the system performs worst for exactly those applicants. Adopting the empirical distribution of applicants as the reference guarantees that the smallest groups receive the least reliable assessments, and it is the members of those groups who bear the consequences.</p>
+  <p class="verdict u">A uniform reference, or a deliberate departure from the empirical one, is defensible here.</p>
+</div>
+
+<h2>What follows</h2>
+
+<p>A representativeness score without a declared reference cannot be interpreted. The same dataset yields different values, and ranks differently against alternatives, depending on a choice that no current instrument requires anyone to disclose. The choice is made regardless, since every measure presupposes one — but it is made silently, and usually by default, because the most accessible measures carry the even split built in.</p>
+
+<p>The proposal is procedural rather than substantive. Providers should state the reference distribution against which representativeness was assessed, and justify it against the intended purpose. That does not make the choice correct. It makes it reviewable.</p>
+
+<footer>
+  <p>Companion demonstration to “Representative of what? The reference distribution problem in bias assessment of legal LLM training data.” Figures are illustrative; the measures shown are Shannon evenness and one minus total variation distance, both normalised to the unit interval.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var GROUPS=["Group 1","Group 2","Group 3","Group 4"];
+  var TARGET=[0.55,0.25,0.15,0.05];
+  var PRESETS=[[0.25,0.25,0.25,0.25],[0.55,0.25,0.15,0.05],[0.42,0.35,0.23,0.00]];
+  var p=PRESETS[0].slice();
+
+  var W=700,H=300,PAD_L=40,PAD_R=20,PAD_T=22,PAD_B=42;
+  var plotW=W-PAD_L-PAD_R, plotH=H-PAD_T-PAD_B, MAXP=0.72;
+  var svg=document.getElementById("chart");
+
+  function y(v){return PAD_T+plotH-(Math.min(v,MAXP)/MAXP)*plotH;}
+  function bw(){return plotW/GROUPS.length;}
+
+  function sei(a){
+    var R=a.length,h=0,i;
+    for(i=0;i<R;i++){if(a[i]>0)h-=a[i]*Math.log(a[i]);}
+    return h/Math.log(R);
+  }
+  function emp(a,t){
+    var s=0,i;for(i=0;i<a.length;i++)s+=Math.abs(a[i]-t[i]);
+    return 1-0.5*s;
+  }
+
+  function render(){
+    var b=bw(),parts=[],i,x;
+    for(i=1;i<=3;i++){
+      var gy=PAD_T+plotH*(i/4);
+      parts.push('<line class="axis" x1="'+PAD_L+'" y1="'+gy+'" x2="'+(W-PAD_R)+'" y2="'+gy+'" opacity=".45"/>');
+    }
+    for(i=0;i<GROUPS.length;i++){
+      x=PAD_L+i*b;
+      parts.push('<rect class="bar" x="'+(x+b*0.20)+'" y="'+y(p[i])+'" width="'+(b*0.60)+'" height="'+(PAD_T+plotH-y(p[i]))+'"/>');
+      parts.push('<rect class="grab" data-i="'+i+'" x="'+x+'" y="'+PAD_T+'" width="'+b+'" height="'+plotH+'" tabindex="0" role="slider" aria-label="'+GROUPS[i]+' proportion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(p[i]*100)+'"/>');
+      parts.push('<text class="glabel" x="'+(x+b/2)+'" y="'+(PAD_T+plotH+20)+'" text-anchor="middle">'+GROUPS[i]+'</text>');
+      parts.push('<text class="glabel" x="'+(x+b/2)+'" y="'+(PAD_T+plotH+36)+'" text-anchor="middle" opacity=".75">'+(p[i]*100).toFixed(0)+'%</text>');
+    }
+    var uy=y(1/GROUPS.length);
+    parts.push('<line class="refline-u" x1="'+PAD_L+'" y1="'+uy+'" x2="'+(W-PAD_R)+'" y2="'+uy+'"/>');
+    parts.push('<text class="rlabel ru" x="'+(W-PAD_R)+'" y="'+(uy-7)+'" text-anchor="end">even split</text>');
+    var d="";
+    for(i=0;i<GROUPS.length;i++){
+      x=PAD_L+i*b;
+      d+=(i===0?"M":"L")+x+" "+y(TARGET[i])+" L"+(x+b)+" "+y(TARGET[i])+" ";
+    }
+    parts.push('<path class="refline-e" d="'+d+'"/>');
+    parts.push('<text class="rlabel re" x="'+(PAD_L+6)+'" y="'+(y(TARGET[0])-8)+'">population</text>');
+    parts.push('<line class="axis" x1="'+PAD_L+'" y1="'+(PAD_T+plotH)+'" x2="'+(W-PAD_R)+'" y2="'+(PAD_T+plotH)+'"/>');
+    svg.innerHTML=parts.join("");
+    document.getElementById("valU").textContent=sei(p).toFixed(2);
+    document.getElementById("valE").textContent=emp(p,TARGET).toFixed(2);
+  }
+
+  function setGroup(i,v){
+    v=Math.max(0,Math.min(MAXP,v));
+    var rest=1-v, oldRest=0,k;
+    for(k=0;k<p.length;k++) if(k!==i) oldRest+=p[k];
+    for(k=0;k<p.length;k++){
+      if(k===i) p[k]=v;
+      else p[k]= oldRest>1e-9 ? p[k]*rest/oldRest : rest/(p.length-1);
+    }
+    render();
+    for(k=0;k<3;k++) document.getElementById("p"+k).setAttribute("aria-pressed","false");
+  }
+
+  function valFromY(clientY){
+    var r=svg.getBoundingClientRect();
+    var yy=(clientY-r.top)*(H/r.height);
+    return ((PAD_T+plotH-yy)/plotH)*MAXP;
+  }
+
+  var dragging=null;
+  svg.addEventListener("pointerdown",function(e){
+    var t=e.target.getAttribute&&e.target.getAttribute("data-i");
+    if(t===null||t===undefined)return;
+    dragging=+t; svg.setPointerCapture(e.pointerId);
+    setGroup(dragging,valFromY(e.clientY)); e.preventDefault();
+  });
+  svg.addEventListener("pointermove",function(e){
+    if(dragging===null)return;
+    setGroup(dragging,valFromY(e.clientY)); e.preventDefault();
+  });
+  function stop(){dragging=null;}
+  svg.addEventListener("pointerup",stop);
+  svg.addEventListener("pointercancel",stop);
+
+  svg.addEventListener("keydown",function(e){
+    var t=e.target.getAttribute&&e.target.getAttribute("data-i");
+    if(t===null||t===undefined)return;
+    var i=+t,step=(e.shiftKey?0.05:0.01);
+    if(e.key==="ArrowUp"||e.key==="ArrowRight"){setGroup(i,p[i]+step);e.preventDefault();}
+    else if(e.key==="ArrowDown"||e.key==="ArrowLeft"){setGroup(i,p[i]-step);e.preventDefault();}
+  });
+
+  [0,1,2].forEach(function(n){
+    document.getElementById("p"+n).addEventListener("click",function(){
+      p=PRESETS[n].slice(); render();
+      [0,1,2].forEach(function(m){
+        document.getElementById("p"+m).setAttribute("aria-pressed", m===n?"true":"false");
+      });
+    });
+  });
+
+  function mini(id,data){
+    var s=document.getElementById(id),w=300,h=110,pl=6,pb=4,pw=w-pl*2,ph=h-pb-6,b=pw/data.length,out=[],i;
+    for(i=0;i<data.length;i++){
+      var bh=(Math.min(data[i],MAXP)/MAXP)*ph;
+      out.push('<rect x="'+(pl+i*b+b*0.20)+'" y="'+(6+ph-bh)+'" width="'+(b*0.60)+'" height="'+bh+'" fill="currentColor"/>');
+    }
+    var d="";
+    for(i=0;i<TARGET.length;i++){
+      var x=pl+i*b, ty=6+ph-(TARGET[i]/MAXP)*ph;
+      d+=(i===0?"M":"L")+x+" "+ty+" L"+(x+b)+" "+ty+" ";
+    }
+    out.push('<path d="'+d+'" class="refline-e"/>');
+    out.push('<line x1="'+pl+'" y1="'+(6+ph)+'" x2="'+(w-pl)+'" y2="'+(6+ph)+'" class="axis"/>');
+    s.innerHTML=out.join("");
+  }
+
+  render();
+  mini("miniA",[0.25,0.25,0.25,0.25]);
+  mini("miniB",[0.55,0.25,0.15,0.05]);
+})();
+</script>
+</body>
+</html>
