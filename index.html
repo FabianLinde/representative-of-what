@@ -205,7 +205,7 @@ footer p{max-width:none}
 <div class="wrap">
 
 <h1>Representative of what?</h1>
-<p class="thesis">The EU AI Act requires training data to be <b>“sufficiently representative”</b> without saying representative of what. Two measures answer that question differently, and they do not agree.</p>
+<p class="thesis">The EU AI Act requires training data to be <b>“sufficiently representative”</b> without saying representative of what. Two measures answer that question differently.</p>
 
 <div class="instrument">
   <div class="chart-wrap">
@@ -242,7 +242,7 @@ footer p{max-width:none}
     </div>
     <p class="symkey"><i>p</i><sub>g</sub> is the dataset&rsquo;s share of group <i>g</i>, <i>q</i><sub>g</sub> the population&rsquo;s share of the same group, and <i>R</i> the number of groups. <i>G</i> is the set of all groups, so both sums run over every one of them. Only the second takes <i>q</i> as an input at all.</p>
   </details>
-  <p class="hint">Drag any bar to reshape the dataset. Both readings update; neither predicts the other.</p>
+  <p class="hint">Drag any bar to reshape the dataset; both readings update.</p>
 </div>
 
 <div class="controls">
@@ -251,11 +251,11 @@ footer p{max-width:none}
   <button id="p2" aria-pressed="false">One group missing</button>
 </div>
 
-<p>Both readings run from 0 to 1, and on both, higher means more representative. They are measuring the same dataset. They are simply pointed at different references: one at an even split across groups, the other at the population the system will actually encounter.</p>
+<p>Both readings run from 0 to 1, and on both, higher means more representative. They are measuring representativeness for the same dataset, but are pointed at different references: one at an even split across groups, the other at the actual, empirical population. The two measures would be equal in case the actual population would be evenly split across groups.</p>
 
 <h2>The rankings can invert</h2>
 
-<p>This is the part that cannot be argued away as a matter of emphasis. Take two candidate datasets and one skewed target population. Each measure prefers a different dataset.</p>
+<p>Take two candidate datasets and one unevenly distributed target population: each measure (uniform vs. empirical) prefers a different dataset.</p>
 
 <div class="flip">
   <div>
@@ -274,7 +274,7 @@ footer p{max-width:none}
   </div>
 </div>
 
-<p>Each dataset scores a flawless 1.00 on one measure. A provider who computes an evenness index reports that A is the ideal dataset. A provider who computes distance to the deployment population reports that B is. Both have measured representativeness. Both are correct about what they measured. Neither has been asked to say which reference they used, and the Act does not require them to.</p>
+<p>Each dataset scores 1.00 on one measure. A provider who computes an evenness index reports that A is the ideal dataset, while a provider who computes distance to the deployment population reports that B is. Both have measured representativeness, but based on different reference distributions.</p>
 
 <h2>Which reference is right depends on the deployment</h2>
 
