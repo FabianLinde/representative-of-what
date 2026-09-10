@@ -352,7 +352,7 @@ footer p{max-width:none}
       d+=(i===0?"M":"L")+x+" "+y(TARGET[i])+" L"+(x+b)+" "+y(TARGET[i])+" ";
     }
     parts.push('<path class="refline-e" d="'+d+'"/>');
-    parts.push('<text class="rlabel re" x="'+(PAD_L+6)+'" y="'+(y(TARGET[0])-8)+'">Axtual population</text>');
+    parts.push('<text class="rlabel re" x="'+(PAD_L+6)+'" y="'+(y(TARGET[0])-8)+'">Actual population</text>');
     parts.push('<line class="axis" x1="'+PAD_L+'" y1="'+(PAD_T+plotH)+'" x2="'+(W-PAD_R)+'" y2="'+(PAD_T+plotH)+'"/>');
     svg.innerHTML=parts.join("");
     document.getElementById("valU").textContent=sei(p).toFixed(2);
