@@ -220,24 +220,24 @@ footer p{max-width:none}
     <div class="readout u">
       <p class="name"><span class="swatch sw-u"></span>Uniform representativeness</p>
       <div class="val" id="valU">1.00</div>
-      <p class="sub">Shannon evenness. Reaches 1 when every group holds an equal share.</p>
+      <p class="sub">Shannon Evenness Index (SEI) has been selected as an examplary measure of uniform representativeness. Reaches 1 when every group holds an equal share.</p>
     </div>
     <div class="readout e">
       <p class="name"><span class="swatch sw-e"></span>Empirical representativeness</p>
       <div class="val" id="valE">0.70</div>
-      <p class="sub">One minus total variation distance. Reaches 1 when the dataset matches the population exactly.</p>
+      <p class="sub">1 - total variation distance (TVD) has been selected as an examplary measure of empirical representativeness. Reaches 1 when the dataset matches the population exactly.</p>
     </div>
   </div>
   <details class="maths">
     <summary>Show the formulas</summary>
-    <div class="maths-body">
+        <div class="maths-body">
       <div>
         <span class="mlabel u">Uniform</span>
-        <div class="formula"><span class="frac"><span class="num">&minus;<span class="sum"><span class="sig">&sum;</span><span class="lim"><i>g</i>&isin;<i>G</i></span></span> <i>p</i><sub>g</sub> ln <i>p</i><sub>g</sub></span><span class="den">ln <i>R</i></span></span></div>
+        <div class="formula">SEI =&nbsp;<span class="frac"><span class="num">&minus;<span class="sum"><span class="sig">&sum;</span><span class="lim"><i>g</i>&isin;<i>G</i></span></span> <i>p</i><sub>g</sub> ln <i>p</i><sub>g</sub></span><span class="den">ln <i>R</i></span></span></div>
       </div>
       <div>
         <span class="mlabel e">Empirical</span>
-        <div class="formula">1 &minus; <span style="font-size:1.15em">&frac12;</span>&thinsp;<span class="sum"><span class="sig">&sum;</span><span class="lim"><i>g</i>&isin;<i>G</i></span></span> |<i>p</i><sub>g</sub> &minus; <i>q</i><sub>g</sub>|</div>
+        <div class="formula">1 &minus; TVD, where TVD =&nbsp;<span style="font-size:1.15em">&frac12;</span>&thinsp;<span class="sum"><span class="sig">&sum;</span><span class="lim"><i>g</i>&isin;<i>G</i></span></span> |<i>p</i><sub>g</sub> &minus; <i>q</i><sub>g</sub>|</div>
       </div>
     </div>
     <p class="symkey"><i>p</i><sub>g</sub> is the dataset&rsquo;s share of group <i>g</i>, <i>q</i><sub>g</sub> the population&rsquo;s share of the same group, and <i>R</i> the number of groups. <i>G</i> is the set of all groups, so both sums run over every one of them. Only the second takes <i>q</i> as an input at all.</p>
