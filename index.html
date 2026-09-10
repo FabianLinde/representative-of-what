@@ -75,6 +75,12 @@ h1{
 }
 .thesis b{color:var(--ink);font-weight:400}
 
+.byline{font-family:Archivo,sans-serif;font-size:14px;line-height:1.5;color:var(--muted);
+  margin:0 0 1.8rem;padding-bottom:1.1rem;border-bottom:1px solid var(--rule)}
+.byline .authors{color:var(--ink);font-weight:600}
+.byline .meta{display:block;margin-top:2px}
+.byline .sep{margin:0 .5em;opacity:.55}
+
 h2{
   font-size:clamp(20px,3vw,26px);
   font-weight:600;
@@ -207,6 +213,11 @@ footer p{max-width:none}
 <h1>Representative of what?</h1>
 <p class="thesis">The EU AI Act requires training data to be <b>“sufficiently representative”</b> without saying representative of what. Two measures answer that question differently.</p>
 
+<p class="byline">
+  <span class="authors">Fabian Linde &amp; Víctor Rodríguez Doncel</span>
+  <span class="meta">Ontology Engineering Group, Universidad Politécnica de Madrid<span class="sep">&middot;</span>September 2026</span>
+</p>
+  
 <div class="instrument">
   <div class="chart-wrap">
     <svg id="chart" viewBox="0 0 700 300" role="img" aria-label="Interactive bar chart of dataset group proportions with two reference distributions overlaid"></svg>
@@ -251,7 +262,7 @@ footer p{max-width:none}
   <button id="p2" aria-pressed="false">One group missing</button>
 </div>
 
-<p>Both readings run from 0 to 1, and on both, higher means more representative. They are measuring representativeness for the same dataset, but are pointed at different references: one at an even split across groups, the other at the actual, empirical population. The two measures would be equal in case the actual population would be evenly split across groups.</p>
+<p>Both metrics range from 0 to 1, with lower numbers being less, higher numbers being more representative. They are measuring representativeness for the same dataset, but are pointed at different references: one at an even split across groups, the other at the actual, empirical population. The two measures would be equal in case the actual population would be evenly split across groups.</p>
 
 <h2>The rankings can invert</h2>
 
@@ -274,31 +285,31 @@ footer p{max-width:none}
   </div>
 </div>
 
-<p>Each dataset scores 1.00 on one measure. A provider who computes an evenness index reports that A is the ideal dataset, while a provider who computes distance to the deployment population reports that B is. Both have measured representativeness, but based on different reference distributions.</p>
+<p>Each dataset scores a perfect 1.00 on one measure. A provider who computes an evenness index reports A as the ideal dataset, while a provider who computes distance to the deployment population reports the same for B. Both have measured representativeness, but based on different reference distributions.</p>
 
 <h2>Which reference is right depends on the deployment</h2>
 
-<p>These two systems both fall under Annex III of the AI Act, and both are therefore governed by the same data-governance obligation. The reference that serves one of them is wrong for the other.</p>
+<p>The two example systems below both are classified as high-risk under Annex III of the AI Act, and both are therefore governed by the same data-governance obligation in Article 10. Nevertheless, different types of measures of representativeness should be applied.</p>
 
 <div class="dep">
   <h3>Case-law retrieval for a judicial authority</h3>
   <p class="cls">Annex III, point 8(a)</p>
-  <p>The system reports what the law is. Its output is correct insofar as it reflects the body of sources as those sources actually stand. If decided cases are unevenly distributed across outcomes or subject matter, that unevenness is a fact about the law. Rebalancing the index toward an even split would make the system misdescribe the legal landscape, and a judge relying on it would form a distorted impression of how comparable matters have been decided.</p>
-  <p class="verdict e">The empirical reference is correct here. Evenness is not a virtue; it is a distortion.</p>
+  <p>The system reports what the law is: its output is correct insofar as it accurately reflects the body of sources as those sources actually stand. If decided cases are unevenly distributed across outcomes or subject matter, that unevenness is a fact about the law. Rebalancing the index toward an even split would make the system misdescribe the legal landscape, and a judge relying on it would form a distorted impression of how comparable matters have been decided.</p>
+  <p class="verdict e">The empirical reference is adequate here.</p>
 </div>
 
 <div class="dep">
   <h3>Decision support in public administration</h3>
   <p class="cls">Annex III, point 5</p>
-  <p>The system produces assessments about individual people, and its purpose is not historical accuracy but accurate and fair decision-making. A group sparsely represented in the training data is one the model has had least opportunity to learn, so the system performs worst for exactly those applicants. Adopting the empirical distribution of applicants as the reference guarantees that the smallest groups receive the least reliable assessments, and it is the members of those groups who bear the consequences.</p>
-  <p class="verdict u">A uniform reference, or a deliberate departure from the empirical one, is defensible here.</p>
+  <p>The system produces assessments about individual people, and its purpose is not historical accuracy, but accurate and fair decision-making. A group sparsely represented in the training data is one the model has had least opportunity to learn, so the system performs worst for exactly those applicants. Adopting the empirical distribution of applicants as the reference guarantees that the smallest groups receive the least reliable assessments, and it is the members of those groups who bear the consequences.</p>
+  <p class="verdict u">A uniform reference, or at least a deliberate departure from the empirical one, is appropriate here.</p>
 </div>
 
 <h2>What follows</h2>
 
-<p>A representativeness score without a declared reference cannot be interpreted. The same dataset yields different values, and ranks differently against alternatives, depending on a choice that no current instrument requires anyone to disclose. The choice is made regardless, since every measure presupposes one — but it is made silently, and usually by default, because the most accessible measures carry the even split built in.</p>
+<p>A representativeness score without a declared reference distribution cannot be interpreted. The same dataset yields different values, and ranks differently against alternatives, depending on a normative choice that providers of high-risk AI systems are currently not legally required to report.</p>
 
-<p>The proposal is procedural rather than substantive. Providers should state the reference distribution against which representativeness was assessed, and justify it against the intended purpose. That does not make the choice correct. It makes it reviewable.</p>
+<p>In order to ensure transparency, we therefore propose including the reference distribution used to assess representativeness, alongside a justification, in the technical documentation required by Article 11 and Annex IV of the AI Act.</p>
 
 <footer>
   <p>Companion demonstration to “Representative of what? The reference distribution problem in bias assessment of legal LLM training data.” Figures are illustrative; the measures shown are Shannon evenness and one minus total variation distance, both normalised to the unit interval.</p>
